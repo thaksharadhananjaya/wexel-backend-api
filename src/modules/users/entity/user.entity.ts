@@ -6,10 +6,28 @@ export class UserEntity {
   @AutoMap()
   name: string;
   @AutoMap()
-  address: string;
+  email: string;
+  @AutoMap()
+  username: string;
+  @AutoMap()
+  profilePictureUrl?: string;
+  @AutoMap()
+  birthDay: Date;
+  @AutoMap()
+  gender: Gender;
 
   @AutoMap()
   createdAt: Date;
   @AutoMap()
   updatedAt?: Date;
 }
+
+export const GENDER: {
+  MALE: "MALE";
+  FEMALE: "FEMALE";
+} = {
+  MALE: "MALE",
+  FEMALE: "FEMALE",
+};
+
+export type Gender = (typeof GENDER)[keyof typeof GENDER];

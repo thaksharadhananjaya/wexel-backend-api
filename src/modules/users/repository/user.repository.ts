@@ -2,46 +2,42 @@
  * @fileOverview - user domain data access layer implementation
  */
 
+import prisma from "../../../config/prisma-client";
 import { UserEntity } from "../entity/user.entity";
 
-let users: UserEntity[] = [
-  {
-    id: "0001",
-    name: "Test Name",
-    address: "Sample Address",
-    createdAt: new Date("2024-07-22T10:20:30Z"),
-  },
-  {
-    id: "0002",
-    name: "Test Name",
-    address: "Sample Address",
-    createdAt: new Date("2024-07-22T10:20:30Z"),
-  },
-];
+let users: UserEntity[] = [];
 
 export class UserRepository {
-  create(user: UserEntity): UserEntity {
-    users.push(user);
-    return user;
+  async create(user: UserEntity): Promise<UserEntity> {
+    return prisma.user.create({ data: user });
   }
 
-  findAll(): UserEntity[] {
-    return users;
+  async findAll(): Promise<UserEntity[]> {
+    return prisma.user.findMany();
   }
 
-  findOne(id: string): UserEntity {
-    return users.find((e) => e.id === id);
+  async findOne(id: string): Promise<UserEntity | null> {
+    return prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  update(id: string, user: UserEntity): UserEntity {
-    users = users.filter((e) => e.id !== id);
-    users.push(user);
-    return user;
+  async update(id: string, user: UserEntity): Promise<UserEntity> {
+    await prisma.user.update({
+      where: { id },
+      data: user,
+    });
+
+    return this.findOne(id);
   }
 
-  delete(id: string): UserEntity {
-    const user = this.findOne(id)
-    users = users.filter((e) => e.id !== id);
-    return user;
+  async delete(id: string): Promise<UserEntity> {
+    return prisma.user.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
