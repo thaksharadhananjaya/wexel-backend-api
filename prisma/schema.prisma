@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---- models ----
+model User {
+  id                String        @id @default(uuid())
+  name              String
+  email             String
+  username          String
+  profilePictureUrl String?
+  birthDay          DateTime
+  gender            GENDER_TYPES
+  appoinment        Appoinment[]
+  doctorDetail      DoctorDetail?
+  rolesOnUser       RolesOnUser[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model DoctorDetail {
+  id          String       @id @default(uuid())
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String       @unique
+  speciality  String
+  description String
+  appoinment  Appoinment[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Appoinment {
+  id              String       @id @default(uuid())
+  user            User         @relation(fields: [userId], references: [id])
+  userId          String
+  doctorDetail    DoctorDetail @relation(fields: [doctorDetailId], references: [id])
+  doctorDetailId  String
+  videoCallUrl    String
+  note            String
+  appointmentTime DateTime
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Role {
+  id    String        @id @default(uuid())
+  name  String
+  users RolesOnUser[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model RolesOnUser {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  role   Role   @relation(fields: [roleId], references: [id])
+  roleId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@id([roleId, userId])
+}
+
+// ---- enums ----
+enum GENDER_TYPES {
+  MALE
+  FEMALE
+}
