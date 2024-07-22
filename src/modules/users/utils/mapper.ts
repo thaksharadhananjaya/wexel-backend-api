@@ -1,0 +1,15 @@
+import { createMap, createMapper } from "@automapper/core";
+import { classes } from "@automapper/classes";
+import { UserEntity } from "../entity/user.entity";
+import { UserResponseDto } from "../dtos/response/user-response.dto";
+import { UseCreateDto } from "../dtos/request/user-create.dto";
+import { UserUpdateDto } from "../dtos/request/user-update.dto";
+
+// Create and export the mapper
+export const mapper = createMapper({
+  strategyInitializer: classes(),
+});
+
+createMap(mapper, UserEntity, UserResponseDto);
+createMap(mapper, UseCreateDto, UserEntity);
+createMap(mapper, UserUpdateDto, UserEntity);
