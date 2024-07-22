@@ -19,7 +19,7 @@ model User {
   name              String
   email             String
   username          String
-  profilePictureUrl String
+  profilePictureUrl String?
   birthDay          DateTime
   gender            GENDER_TYPES
   appoinment        Appoinment[]
@@ -70,13 +70,13 @@ model Role {
 }
 
 model RolesOnUser {
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String 
-  role       Role     @relation(fields: [roleId], references: [id])
-  roleId     String 
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  role   Role   @relation(fields: [roleId], references: [id])
+  roleId String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
   @@id([roleId, userId])
