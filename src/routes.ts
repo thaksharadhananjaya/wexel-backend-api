@@ -16,7 +16,6 @@ export class Routes {
         router.delete('/users/:id', userController.delete);
 
         // Doctor Details routes
-        //router.get('/users', userController.findAll);
         router.get('/users/:userId/doctor-details', doctorDetailController.findOne);
         router.post('/users/:userId/doctor-details', doctorDetailController.create);
         router.patch('/users/:userId/doctor-details', doctorDetailController.update);
