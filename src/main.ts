@@ -1,11 +1,13 @@
 import express from "express";
 import { Routes } from "./routes";
 import ENVIRONMENT from "./config/environment";
-import globalErrorHandler from "./middleware/global-error-handler";
+import globalErrorHandler from "./middlewares/global-error-handler.middleware";
+import { httpResponse } from "./middlewares/http-response.middleware";
 
 const app = express();
 
 app.use(express.json());
+app.use(httpResponse);
 app.use("/api/v1/", Routes.routes);
 // Global error handling middleware
 app.use(globalErrorHandler);
