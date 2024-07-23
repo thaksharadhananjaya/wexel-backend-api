@@ -19,6 +19,7 @@ export class DoctorDetailsService {
     /**
      * Creates a new doctorDetail.
      *
+     * @param {string} userId - The User ID of the doctorDetails to create.
      * @param {DoctorDetailsCreateDto} doctorDetailsCreateDto - The DTO containing the data to create a new doctorDetails.
      * @returns {DoctorDetailsResponseDto} The created doctorDetails.
      */
@@ -46,9 +47,9 @@ export class DoctorDetailsService {
     };
 
     /**
-     * Retrieves a doctorDetails by ID.
+     * Retrieves a doctorDetails by User ID.
      *
-     * @param {string} id - The ID of the doctorDetails to retrieve.
+     * @param {string} userId - The User ID of the doctorDetails to retrieve.
      * @returns {DoctorDetailsResponseDto} The doctorDetails DTO.
      */
     findByUserId = async (
@@ -71,9 +72,9 @@ export class DoctorDetailsService {
     };
 
     /**
-     * Updates an existing doctorDetails.
+     * Updates an existing doctorDetails by User ID.
      *
-     * @param {string} id - The ID of the doctorDetails to update.
+     * @param {string} userId - The User ID of the doctorDetails to update.
      * @param {DoctorDetailsUpdateDto} doctorDetailsUpdateDto - The DTO containing the data to update the doctorDetails.
      * @returns {DoctorDetailsResponseDto} The updated doctorDetails DTO.
      */
