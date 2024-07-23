@@ -1,3 +1,3 @@
-import { QueryDto } from "../../../../dtos";
+import { QueryDto } from '../../../../dtos';
 
 export class UserQueryDto extends QueryDto {}

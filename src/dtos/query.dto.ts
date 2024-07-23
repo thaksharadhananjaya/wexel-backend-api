@@ -1,7 +1,7 @@
 export class QueryDto {
-  offset?: number;
+    offset?: number;
 
-  limit?: number;
+    limit?: number;
 
-  sortBy?: string;
+    sortBy?: string;
 }

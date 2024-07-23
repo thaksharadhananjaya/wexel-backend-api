@@ -1,17 +1,17 @@
-import { AutoMap } from "@automapper/classes";
-import { Gender } from "../../entity/user.entity";
+import { Gender } from '../../entity/user.entity';
+import { AutoMap } from '@automapper/classes';
 
 export class UseCreateDto {
-  @AutoMap()
-  name: string;
-  @AutoMap()
-  email: string;
-  @AutoMap()
-  username: string;
-  @AutoMap()
-  profilePictureUrl?: string;
-  @AutoMap()
-  birthDay: Date;
-  @AutoMap()
-  gender: Gender;
+    @AutoMap()
+    name: string;
+    @AutoMap()
+    email: string;
+    @AutoMap()
+    username: string;
+    @AutoMap()
+    profilePictureUrl?: string;
+    @AutoMap()
+    birthDay: Date;
+    @AutoMap()
+    gender: Gender;
 }
