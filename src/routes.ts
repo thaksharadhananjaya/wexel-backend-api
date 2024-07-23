@@ -1,4 +1,4 @@
-import { DoctorDetailsController } from './modules/doctor-deatils/doctor-details.controller';
+import { DoctorDetailsController } from './modules/doctor-details/doctor-details.controller';
 import { UserController } from './modules/users/user.controller';
 import { Router } from 'express';
 
