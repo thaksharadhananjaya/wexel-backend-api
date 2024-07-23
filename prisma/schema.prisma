@@ -35,7 +35,7 @@ model DoctorDetail {
   id          String       @id @default(uuid())
   user        User         @relation(fields: [userId], references: [id])
   userId      String       @unique
-  speciality  String
+  specialty  String
   description String
   appoinment  Appoinment[]
 
