@@ -8,7 +8,10 @@ import { UserResponseDto } from "../dtos/response/user-response.dto";
 import { UserEntity } from "../entity/user.entity";
 import { mapper } from "../utils/mapper";
 import { UserRepository } from "../repository/user.repository";
-import { NotFoundException } from "../../../exception/not-found-exception";
+import { NotFoundException } from "../../../exceptions/not-found-exception";
+import { UserQueryDto } from "../dtos/request/user-query.dto";
+import objectPicker from "../../../utils/object-picker";
+import { IPaginatedResults } from "../../../interfaces/paginated-results.interface";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -36,11 +39,19 @@ export class UserService {
    *
    * @returns {UserResponseDto[]} An array of user DTOs.
    */
-  findAll = async (): Promise<UserResponseDto[]> => {
-    const user = await this.userRepository.findAll();
-    const userDtos = mapper.mapArray(user, UserEntity, UserResponseDto);
+  findAll = async (
+    userQueryDto: UserQueryDto
+  ): Promise<IPaginatedResults<UserResponseDto>> => {
+    const options = objectPicker(userQueryDto, ["page", "limit"]);
 
-    return userDtos;
+    const paginateData = await this.userRepository.findAll(options);
+    const results = mapper.mapArray(
+      paginateData.results,
+      UserEntity,
+      UserResponseDto
+    );
+
+    return { ...paginateData, results };
   };
 
   /**

@@ -13,7 +13,7 @@ export class UserController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.send(await this.userService.create(req.body));
+      res.status(201).send(await this.userService.create(req.body));
     } catch (error) {
       next(error);
     }
@@ -21,7 +21,7 @@ export class UserController {
 
   findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.send(await this.userService.findAll());
+      res.status(200).json(await this.userService.findAll(req.query));
     } catch (error) {
       next(error);
     }
@@ -29,7 +29,7 @@ export class UserController {
 
   findOne = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.send(await this.userService.findOne(req.params?.id));
+      res.status(200).json(await this.userService.findOne(req.params?.id));
     } catch (error) {
       next(error);
     }
@@ -37,7 +37,7 @@ export class UserController {
 
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.send(await this.userService.update(req.params?.id, req.body));
+      res.status(200).json(await this.userService.update(req.params?.id, req.body));
     } catch (error) {
       next(error);
     }
@@ -45,7 +45,7 @@ export class UserController {
 
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.send(await this.userService.delete(req.params?.id));
+      res.status(200).json(await this.userService.delete(req.params?.id));
     } catch (error) {
       next(error);
     }
