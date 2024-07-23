@@ -1,6 +1,6 @@
 // src/middleware/globalErrorHandler.ts
 import { Request, Response, NextFunction } from "express";
-import { BaseException } from "../exception/base-exception";
+import { BaseException } from "../exceptions/base-exception";
 
 const globalErrorHandler = (
   err: BaseException,
