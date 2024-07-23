@@ -1,33 +1,56 @@
 /**
  * @fileOverview - user domain REST controller layer implementation
  */
-
-import { Request, Response } from "express";
-import { UserService } from "./service/user.service";
+import { UserService } from './service/user.service';
+import { NextFunction, Request, Response } from 'express';
 
 export class UserController {
-  private userService: UserService;
-  constructor() {
-    this.userService = new UserService();
-  }
+    private userService: UserService;
+    constructor() {
+        this.userService = new UserService();
+    }
 
-  create = (req: Request, res: Response) => {
-    res.send(this.userService.create(req.body));
-  };
+    create = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.status(201).send(await this.userService.create(req.body));
+        } catch (error) {
+            next(error);
+        }
+    };
 
-  findAll = (req: Request, res: Response) => {
-    res.send(this.userService.findAll());
-  };
+    findAll = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.status(200).json(await this.userService.findAll(req.query));
+        } catch (error) {
+            next(error);
+        }
+    };
 
-  findOne = (req: Request, res: Response) => {
-    res.send(this.userService.findOne(req.params?.id));
-  };
+    findOne = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.status(200).json(
+                await this.userService.findOne(req.params?.id)
+            );
+        } catch (error) {
+            next(error);
+        }
+    };
 
-  update = (req: Request, res: Response) => {
-    res.send(this.userService.update(req.params?.id, req.body));
-  };
+    update = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.status(200).json(
+                await this.userService.update(req.params?.id, req.body)
+            );
+        } catch (error) {
+            next(error);
+        }
+    };
 
-  delete = (req: Request, res: Response) => {
-    res.send(this.userService.delete(req.params?.id));
-  };
+    delete = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.status(200).json(await this.userService.delete(req.params?.id));
+        } catch (error) {
+            next(error);
+        }
+    };
 }
