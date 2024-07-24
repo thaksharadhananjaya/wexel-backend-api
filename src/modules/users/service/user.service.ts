@@ -4,6 +4,8 @@
 import { NotFoundException } from '../../../exceptions/not-found-exception';
 import { IPaginatedResults } from '../../../interfaces/paginated-results.interface';
 import objectPicker from '../../../utils/object-picker';
+import { RoleService } from '../../roles/service/role.service';
+import { RoleAssignDto } from '../dtos/request/role-assign.dto';
 import { UseCreateDto } from '../dtos/request/user-create.dto';
 import { UserQueryDto } from '../dtos/request/user-query.dto';
 import { UserUpdateDto } from '../dtos/request/user-update.dto';
@@ -14,8 +16,10 @@ import { mapper } from '../utils/mapper';
 
 export class UserService {
     private userRepository: UserRepository;
+    private roleService: RoleService;
     constructor() {
         this.userRepository = new UserRepository();
+        this.roleService = new RoleService();
     }
 
     /**
@@ -28,6 +32,9 @@ export class UserService {
         const user = mapper.map(userCreateDto, UseCreateDto, UserEntity);
 
         const createdUser = await this.userRepository.create(user);
+
+        // assign default role as 'user'
+        await this.assignRoleToUser(createdUser.id, { roleName: 'user' });
         const userDto = mapper.map(createdUser, UserEntity, UserResponseDto);
 
         return userDto;
@@ -41,9 +48,13 @@ export class UserService {
     findAll = async (
         userQueryDto: UserQueryDto
     ): Promise<IPaginatedResults<UserResponseDto>> => {
+        const filters = objectPicker(userQueryDto, ['role']);
         const options = objectPicker(userQueryDto, ['page', 'limit']);
 
-        const paginateData = await this.userRepository.findAll(options);
+        const paginateData = await this.userRepository.findAll(
+            filters,
+            options
+        );
         const results = mapper.mapArray(
             paginateData.results,
             UserEntity,
@@ -61,6 +72,7 @@ export class UserService {
      */
     findOne = async (id: string): Promise<UserResponseDto> => {
         const user = await this.userRepository.findOne(id);
+
         if (!user) {
             throw new NotFoundException(`User not found given id ${id}`);
         }
@@ -105,5 +117,18 @@ export class UserService {
         const userDto = mapper.map(deletedUser, UserEntity, UserResponseDto);
 
         return userDto;
+    };
+
+    /**
+     * Assign role to user by ID.
+     *
+     * @param {string} id - The ID of the user's.
+     * @returns {RoleAssignDto} The role assign DTO.
+     */
+    assignRoleToUser = async (userId: string, roleAssignDto: RoleAssignDto) => {
+        const role = await this.roleService.findByName(roleAssignDto.roleName);
+
+        // call the method from RolesService to assign the role to the user
+        return await this.roleService.createRolesOnUser(userId, role.id);
     };
 }
