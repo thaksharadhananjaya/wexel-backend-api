@@ -3,13 +3,7 @@ import { UserUpdateDto } from '../dtos/request/user-update.dto';
 import { UserResponseDto } from '../dtos/response/user-response.dto';
 import { UserEntity } from '../entity/user.entity';
 import { classes } from '@automapper/classes';
-import {
-    afterMap,
-    createMap,
-    createMapper,
-    forMember,
-    mapFrom,
-} from '@automapper/core';
+import { createMap, createMapper, forMember, mapFrom } from '@automapper/core';
 
 // Create and export the mapper
 export const mapper = createMapper({
