@@ -12,10 +12,13 @@ export class UserRepository {
         });
     }
 
-    async findAll(options: {
-        page: number;
-        limit: number;
-    }): Promise<IPaginatedResults<UserEntity>> {
+    async findAll(
+        filters: { role?: string },
+        options: {
+            page: number;
+            limit: number;
+        }
+    ): Promise<IPaginatedResults<UserEntity>> {
         // set default values
         if (isNaN(options.page)) options.page = 1;
         if (isNaN(options.limit)) options.limit = 100;
@@ -33,12 +36,24 @@ export class UserRepository {
                     },
                 },
             },
+            ...(filters.role && {
+                where: {
+                    rolesOnUser: {
+                        some: {
+                            role: {
+                                name: filters.role,
+                            },
+                        },
+                    },
+                },
+            }),
         };
 
         const queryResults: [number, UserEntity[]] = await prisma.$transaction([
             prisma.user.count({
                 where: {
                     deletedAt: null,
+                    ...params.where,
                 },
             }),
             prisma.user.findMany(params),

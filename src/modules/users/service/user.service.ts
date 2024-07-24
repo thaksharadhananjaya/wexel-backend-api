@@ -48,9 +48,13 @@ export class UserService {
     findAll = async (
         userQueryDto: UserQueryDto
     ): Promise<IPaginatedResults<UserResponseDto>> => {
+        const filters = objectPicker(userQueryDto, ['role']);
         const options = objectPicker(userQueryDto, ['page', 'limit']);
 
-        const paginateData = await this.userRepository.findAll(options);
+        const paginateData = await this.userRepository.findAll(
+            filters,
+            options
+        );
         const results = mapper.mapArray(
             paginateData.results,
             UserEntity,
@@ -115,7 +119,7 @@ export class UserService {
         return userDto;
     };
 
-     /**
+    /**
      * Assign role to user by ID.
      *
      * @param {string} id - The ID of the user's.

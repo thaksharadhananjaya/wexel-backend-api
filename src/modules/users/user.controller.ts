@@ -57,7 +57,10 @@ export class UserController {
     assignRole = async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.status(200).json(
-                await this.userService.assignRoleToUser(req.params?.id, req.body)
+                await this.userService.assignRoleToUser(
+                    req.params?.id,
+                    req.body
+                )
             );
         } catch (error) {
             next(error);
