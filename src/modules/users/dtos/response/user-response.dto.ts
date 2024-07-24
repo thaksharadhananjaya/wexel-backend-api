@@ -16,6 +16,8 @@ export class UserResponseDto {
     birthDay: Date;
     @AutoMap()
     gender: Gender;
+    @AutoMap()
+    roles: string[];
 
     @AutoMap()
     createdAt: Date;

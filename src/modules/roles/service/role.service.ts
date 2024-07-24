@@ -9,14 +9,19 @@ import { RoleCreateDto } from '../dtos/request/role-create.dto';
 import { RoleQueryDto } from '../dtos/request/role-query.dto';
 import { RoleUpdateDto } from '../dtos/request/role-update.dto';
 import { RoleResponseDto } from '../dtos/response/role-response.dto';
+import { RoleOnUserEntity } from '../entity/role-on-user.entity';
 import { RoleEntity } from '../entity/role.entity';
+import { RoleOnUserRepository } from '../repository/role-on-user.repository';
 import { RoleRepository } from '../repository/role.repository';
 import { mapper } from '../utils/mapper';
 
 export class RoleService {
     private roleRepository: RoleRepository;
+    private roleOnUserRepository: RoleOnUserRepository;
+
     constructor() {
         this.roleRepository = new RoleRepository();
+        this.roleOnUserRepository = new RoleOnUserRepository();
     }
 
     /**
@@ -114,6 +119,32 @@ export class RoleService {
         const roleDto = mapper.map(deletedRole, RoleEntity, RoleResponseDto);
 
         return roleDto;
+    };
+
+    /**
+     * attach role to user
+     * @param {string} userId
+     * @param {string} roleId
+     */
+    async createRolesOnUser(
+        userId: string,
+        roleId: string
+    ): Promise<RoleOnUserEntity> {
+        const rolesOnUser: RoleOnUserEntity = new RoleOnUserEntity();
+        rolesOnUser.userId = userId;
+        rolesOnUser.roleId = roleId;
+
+        return await this.roleOnUserRepository.createRolesOnUser(rolesOnUser);
+    }
+
+    findByName = async (name: string): Promise<RoleResponseDto> => {
+        const role = await this.roleRepository.findByName(name);
+
+        if (!role) {
+            throw new NotFoundException(`Role not found given name '${name}'`);
+        }
+
+        return mapper.map(role, RoleEntity, RoleResponseDto);
     };
 
     private __validateRoleName = async (name: string) => {

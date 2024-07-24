@@ -16,6 +16,7 @@ export class Routes {
         router.post('/users', userController.create);
         router.patch('/users/:id', userController.update);
         router.delete('/users/:id', userController.delete);
+        router.post('/users/:id/assign-role', userController.assignRole);
 
         // Role routes
         router.get('/roles', roleController.findAll);

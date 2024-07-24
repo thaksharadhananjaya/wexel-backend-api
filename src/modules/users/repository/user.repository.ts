@@ -5,11 +5,11 @@ import prisma from '../../../config/prisma-client';
 import { IPaginatedResults } from '../../../interfaces/paginated-results.interface';
 import { UserEntity } from '../entity/user.entity';
 
-let users: UserEntity[] = [];
-
 export class UserRepository {
     async create(user: UserEntity): Promise<UserEntity> {
-        return prisma.user.create({ data: user });
+        return prisma.user.create({
+            data: { ...user, rolesOnUser: undefined },
+        });
     }
 
     async findAll(options: {
@@ -26,6 +26,13 @@ export class UserRepository {
         const params = {
             skip: (options.page - 1) * options.limit,
             take: options.limit,
+            include: {
+                rolesOnUser: {
+                    include: {
+                        role: true,
+                    },
+                },
+            },
         };
 
         const queryResults: [number, UserEntity[]] = await prisma.$transaction([
@@ -47,17 +54,26 @@ export class UserRepository {
     }
 
     async findOne(id: string): Promise<UserEntity | null> {
-        return prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
                 id,
             },
+            include: {
+                rolesOnUser: {
+                    include: {
+                        role: true,
+                    },
+                },
+            },
         });
+
+        return user;
     }
 
     async update(id: string, user: UserEntity): Promise<UserEntity> {
         await prisma.user.update({
             where: { id },
-            data: user,
+            data: { ...user, rolesOnUser: undefined },
         });
 
         return this.findOne(id);
