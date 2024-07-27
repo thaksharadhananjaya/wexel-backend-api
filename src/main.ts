@@ -1,7 +1,7 @@
 import ENVIRONMENT from './config/environment';
 import globalErrorHandler from './middlewares/global-error-handler.middleware';
 import { httpResponse } from './middlewares/http-response.middleware';
-import { Routes } from './routes';
+import { Routes } from './routes/routes';
 import express from 'express';
 
 const app = express();

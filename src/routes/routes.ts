@@ -1,6 +1,6 @@
-import { DoctorDetailsController } from './modules/doctor-details/doctor-details.controller';
-import { RoleController } from './modules/roles/role.controller';
-import { UserController } from './modules/users/user.controller';
+import { DoctorDetailsController } from '../modules/doctor-details/doctor-details.controller';
+import { RoleController } from '../modules/roles/role.controller';
+import { UserController } from '../modules/users/user.controller';
 import { Router } from 'express';
 
 export class Routes {
@@ -10,7 +10,29 @@ export class Routes {
         const doctorDetailController = new DoctorDetailsController();
         const roleController = new RoleController();
 
-        // User routes
+  
+        /**
+         * @swagger
+         * /api/v1/users:
+         *   get:
+         *     summary: Retrieve a list of users
+         *     responses:
+         *       200:
+         *         description: A list of users
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: array
+         *               items:
+         *                 type: object
+         *                 properties:
+         *                   id:
+         *                     type: integer
+         *                     example: 1
+         *                   name:
+         *                     type: string
+         *                     example: John Doe
+         */
         router.get('/users', userController.findAll);
         router.get('/users/:id', userController.findOne);
         router.post('/users', userController.create);
