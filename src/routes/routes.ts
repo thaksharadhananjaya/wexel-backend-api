@@ -43,6 +43,7 @@ export class Routes {
             doctorDetailController.update
         );
 
+        // Appointment routes
         router.get('/users/:userId/appointments', appointmentController.findAllByUserId);
         router.get('/users/:userId/appointments/:id', appointmentController.findOne);
         router.post('/users/:userId/appointments', appointmentController.create);
@@ -50,6 +51,7 @@ export class Routes {
         router.delete('/users/:userId/appointments/:id', appointmentController.delete);
         router.get('/appointments', appointmentController.findAll);
 
+        // Payment routes
         router.get('/users/:userId/appointments/:appointmentId/payments', paymentController.findAllByUserId);
         router.get('/users/:userId/appointments/:appointmentId/payments/:id', paymentController.findOne);
         router.post('/users/:userId/appointments/:appointmentId/payments', paymentController.create);
