@@ -6,7 +6,7 @@ import { IPaginatedResults } from '../../../interfaces/paginated-results.interfa
 import objectPicker from '../../../utils/object-picker';
 import { RoleService } from '../../roles/service/role.service';
 import { RoleAssignDto } from '../dtos/request/role-assign.dto';
-import { UseCreateDto } from '../dtos/request/user-create.dto';
+import { UserCreateDto } from '../dtos/request/user-create.dto';
 import { UserQueryDto } from '../dtos/request/user-query.dto';
 import { UserUpdateDto } from '../dtos/request/user-update.dto';
 import { UserResponseDto } from '../dtos/response/user-response.dto';
@@ -28,8 +28,8 @@ export class UserService {
      * @param {UserCreateDto} userCreateDto - The DTO containing the data to create a new user.
      * @returns {UserResponseDto} The created user.
      */
-    create = async (userCreateDto: UseCreateDto): Promise<UserResponseDto> => {
-        const user = mapper.map(userCreateDto, UseCreateDto, UserEntity);
+    create = async (userCreateDto: UserCreateDto): Promise<UserResponseDto> => {
+        const user = mapper.map(userCreateDto, UserCreateDto, UserEntity);
 
         const createdUser = await this.userRepository.create(user);
 

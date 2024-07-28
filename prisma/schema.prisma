@@ -32,10 +32,10 @@ model User {
 }
 
 model DoctorDetail {
-  id          String       @id @default(uuid())
-  user        User         @relation(fields: [userId], references: [id])
-  userId      String       @unique
-  specialty  String
+  id          String        @id @default(uuid())
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String        @unique
+  specialty   String
   description String
   appoinment  Appointment[]
 
@@ -53,6 +53,7 @@ model Appointment {
   videoCallUrl    String
   note            String?
   appointmentTime DateTime
+  Payment         Payment?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -82,8 +83,29 @@ model RolesOnUser {
   @@id([roleId, userId])
 }
 
+model Payment {
+  id            String               @id @default(uuid())
+  paymentType   PAYMENT_TYPES
+  status        PAYMENT_STATUS_TYPES
+  amount        Float
+  appointmentId String               @unique
+  appointment   Appointment          @relation(fields: [appointmentId], references: [id])
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  deletedAt     DateTime?
+}
+
 // ---- enums ----
 enum GENDER_TYPES {
   MALE
   FEMALE
+}
+
+enum PAYMENT_TYPES {
+  CARD
+}
+
+enum PAYMENT_STATUS_TYPES {
+  SUCCESS
+  FAILED
 }

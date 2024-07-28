@@ -1,5 +1,6 @@
 import { AppointmentController } from '../modules/appointments/appointment.controller';
 import { DoctorDetailsController } from '../modules/doctor-details/doctor-details.controller';
+import { PaymentController } from '../modules/payments/payment.controller';
 import { RoleController } from '../modules/roles/role.controller';
 import { UserController } from '../modules/users/user.controller';
 import { Router } from 'express';
@@ -11,6 +12,7 @@ export class Routes {
         const doctorDetailController = new DoctorDetailsController();
         const roleController = new RoleController();
         const appointmentController = new AppointmentController();
+        const paymentController = new PaymentController();
 
 
         router.get('/users', userController.findAll);
@@ -47,6 +49,13 @@ export class Routes {
         router.patch('/users/:userId/appointments/:id', appointmentController.update);
         router.delete('/users/:userId/appointments/:id', appointmentController.delete);
         router.get('/appointments', appointmentController.findAll);
+
+        router.get('/users/:userId/appointments/:appointmentId/payments', paymentController.findAllByUserId);
+        router.get('/users/:userId/appointments/:appointmentId/payments/:id', paymentController.findOne);
+        router.post('/users/:userId/appointments/:appointmentId/payments', paymentController.create);
+        router.patch('/users/:userId/appointments/:appointmentId/payments/:id', paymentController.update);
+        router.delete('/users/:userId/appointments/:appointmentId/payments/:id', paymentController.delete);
+        router.get('/payments', paymentController.findAll);
 
         return router;
     }

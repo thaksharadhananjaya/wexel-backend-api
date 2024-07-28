@@ -1,4 +1,4 @@
-import { UseCreateDto } from '../dtos/request/appointment-create.dto';
+import { AppointmentCreateDto } from '../dtos/request/appointment-create.dto';
 import { AppointmentUpdateDto } from '../dtos/request/appointment-update.dto';
 import { AppointmentResponseDto } from '../dtos/response/appointment-response.dto';
 import { AppointmentEntity } from '../entity/appointment.entity';
@@ -11,5 +11,5 @@ export const mapper = createMapper({
 });
 
 createMap(mapper, AppointmentEntity, AppointmentResponseDto);
-createMap(mapper, UseCreateDto, AppointmentEntity);
+createMap(mapper, AppointmentCreateDto, AppointmentEntity);
 createMap(mapper, AppointmentUpdateDto, AppointmentEntity);

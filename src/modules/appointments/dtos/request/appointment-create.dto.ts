@@ -1,7 +1,7 @@
 
 import { AutoMap } from '@automapper/classes';
 
-export class UseCreateDto {
+export class AppointmentCreateDto {
     @AutoMap()
     doctorDetailId: string;
     @AutoMap()

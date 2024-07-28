@@ -1,4 +1,4 @@
-import { UseCreateDto } from '../dtos/request/user-create.dto';
+import { UserCreateDto } from '../dtos/request/user-create.dto';
 import { UserUpdateDto } from '../dtos/request/user-update.dto';
 import { UserResponseDto } from '../dtos/response/user-response.dto';
 import { UserEntity } from '../entity/user.entity';
@@ -21,5 +21,5 @@ createMap(
         )
     )
 );
-createMap(mapper, UseCreateDto, UserEntity);
+createMap(mapper, UserCreateDto, UserEntity);
 createMap(mapper, UserUpdateDto, UserEntity);
