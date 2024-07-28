@@ -1,7 +1,7 @@
 import { Gender } from '../../entity/user.entity';
 import { AutoMap } from '@automapper/classes';
 
-export class UseCreateDto {
+export class UserCreateDto {
     @AutoMap()
     name: string;
     @AutoMap()
