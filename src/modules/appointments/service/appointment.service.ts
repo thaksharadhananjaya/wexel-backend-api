@@ -26,7 +26,8 @@ export class AppointmentService {
 
     /**
      * Creates a new appointment.
-     *
+     * 
+     * @param {string} userId - The user ID 
      * @param {AppointmentCreateDto} appointmentCreateDto - The DTO containing the data to create a new appointment.
      * @returns {AppointmentResponseDto} The created appointment.
      */

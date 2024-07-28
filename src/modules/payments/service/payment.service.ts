@@ -23,7 +23,9 @@ export class PaymentService {
 
     /**
      * Creates a new payment.
-     *
+     * 
+     * @param {string} userId - The user ID 
+     * @param {string} appointmentId - The appointment ID
      * @param {PaymentCreateDto} paymentCreateDto - The DTO containing the data to create a new payment.
      * @returns {PaymentResponseDto} The created payment.
      */
@@ -58,7 +60,7 @@ export class PaymentService {
      * Retrieves all payments by user id and appointment id.
      *
      * @param {string} userId - The user ID of the payment to retrieve.
-     * @param {string} appointmentId - The appointmentId ID of the payment to retrieve.
+     * @param {string} appointmentId - The appointment ID of the payment to retrieve.
      * @param {string} id - The ID of the payment to retrieve.
      * @returns {PaymentResponseDto[]} An array of payment DTOs.
      */
@@ -91,7 +93,7 @@ export class PaymentService {
      * Retrieves a payment by user id, appointment id & payment id.
      *
      * @param {string} userId - The user ID of the payment to retrieve.
-     * @param {string} appointmentId - The appointmentId ID of the payment to retrieve.
+     * @param {string} appointmentId - The appointment ID of the payment to retrieve.
      * @param {string} id - The ID of the payment to retrieve.
      * @returns {PaymentResponseDto} The payment DTO.
      */
@@ -121,7 +123,7 @@ export class PaymentService {
      * Updates an existing payment by user id, appointment id & payment id.
      *
      * @param {string} userId - The user ID of the payment to retrieve.
-     * @param {string} appointmentId - The appointmentId ID of the payment to retrieve.
+     * @param {string} appointmentId - The appointment ID of the payment to retrieve.
      * @param {string} id - The ID of the payment to retrieve.
      * @param {PaymentUpdateDto} paymentUpdateDto - The DTO containing the data to update the payment.
      * @returns {PaymentResponseDto} The updated payment DTO.
@@ -159,7 +161,7 @@ export class PaymentService {
      * Delete a payment by user id, appointment id & payment id.
      *
      * @param {string} userId - The user ID of the payment to retrieve.
-     * @param {string} appointmentId - The appointmentId ID of the payment to retrieve.
+     * @param {string} appointmentId - The appointment ID of the payment to retrieve.
      * @param {string} id - The ID of the payment to retrieve.
      * @returns {PaymentResponseDto} The deleted payment DTO.
      */
