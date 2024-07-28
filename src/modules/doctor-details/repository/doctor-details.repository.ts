@@ -11,10 +11,18 @@ export class DoctorDetailsRepository {
         return prisma.doctorDetail.create({ data: doctorDetail });
     }
 
-    async findByUserId(id: string): Promise<DoctorDetailsEntity | null> {
+    async findByUserId(userId: string): Promise<DoctorDetailsEntity | null> {
         return prisma.doctorDetail.findUnique({
             where: {
-                userId: id,
+                userId,
+            },
+        });
+    }
+
+    async findById(id: string): Promise<DoctorDetailsEntity | null> {
+        return prisma.doctorDetail.findUnique({
+            where: {
+                id,
             },
         });
     }
