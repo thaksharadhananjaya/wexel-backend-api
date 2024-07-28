@@ -103,4 +103,27 @@ export class DoctorDetailsService {
 
         return doctorDetailsDto;
     };
+
+    /**
+     * Retrieves a doctorDetails by ID.
+     *
+     * @param {string} userId - The ID of the doctorDetails to retrieve.
+     * @returns {DoctorDetailsResponseDto} The doctorDetails DTO.
+     */
+    findById = async (id: string): Promise<DoctorDetailsResponseDto> => {
+        const doctorDetails =
+            await this.doctorDetailsRepository.findById(id);
+        if (!doctorDetails) {
+            throw new NotFoundException(
+                `DoctorDetail not found given id '${id}'`
+            );
+        }
+        const doctorDetailsDto = mapper.map(
+            doctorDetails,
+            DoctorDetailsEntity,
+            DoctorDetailsResponseDto
+        );
+
+        return doctorDetailsDto;
+    };
 }

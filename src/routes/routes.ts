@@ -1,3 +1,4 @@
+import { AppointmentController } from '../modules/appointments/appointment.controller';
 import { DoctorDetailsController } from '../modules/doctor-details/doctor-details.controller';
 import { RoleController } from '../modules/roles/role.controller';
 import { UserController } from '../modules/users/user.controller';
@@ -9,30 +10,9 @@ export class Routes {
         const userController = new UserController();
         const doctorDetailController = new DoctorDetailsController();
         const roleController = new RoleController();
+        const appointmentController = new AppointmentController();
 
-  
-        /**
-         * @swagger
-         * /api/v1/users:
-         *   get:
-         *     summary: Retrieve a list of users
-         *     responses:
-         *       200:
-         *         description: A list of users
-         *         content:
-         *           application/json:
-         *             schema:
-         *               type: array
-         *               items:
-         *                 type: object
-         *                 properties:
-         *                   id:
-         *                     type: integer
-         *                     example: 1
-         *                   name:
-         *                     type: string
-         *                     example: John Doe
-         */
+
         router.get('/users', userController.findAll);
         router.get('/users/:id', userController.findOne);
         router.post('/users', userController.create);
@@ -60,6 +40,13 @@ export class Routes {
             '/users/:userId/doctor-details',
             doctorDetailController.update
         );
+
+        router.get('/users/:userId/appointments', appointmentController.findAllByUserId);
+        router.get('/users/:userId/appointments/:id', appointmentController.findOne);
+        router.post('/users/:userId/appointments', appointmentController.create);
+        router.patch('/users/:userId/appointments/:id', appointmentController.update);
+        router.delete('/users/:userId/appointments/:id', appointmentController.delete);
+        router.get('/appointments', appointmentController.findAll);
 
         return router;
     }

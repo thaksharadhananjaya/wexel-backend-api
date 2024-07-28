@@ -22,7 +22,7 @@ model User {
   profilePictureUrl String?
   birthDay          DateTime
   gender            GENDER_TYPES
-  appoinment        Appoinment[]
+  appoinment        Appointment[]
   doctorDetail      DoctorDetail?
   rolesOnUser       RolesOnUser[]
 
@@ -37,21 +37,21 @@ model DoctorDetail {
   userId      String       @unique
   specialty  String
   description String
-  appoinment  Appoinment[]
+  appoinment  Appointment[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }
 
-model Appoinment {
+model Appointment {
   id              String       @id @default(uuid())
   user            User         @relation(fields: [userId], references: [id])
   userId          String
   doctorDetail    DoctorDetail @relation(fields: [doctorDetailId], references: [id])
   doctorDetailId  String
   videoCallUrl    String
-  note            String
+  note            String?
   appointmentTime DateTime
 
   createdAt DateTime  @default(now())
