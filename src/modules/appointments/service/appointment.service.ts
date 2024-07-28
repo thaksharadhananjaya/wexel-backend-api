@@ -6,7 +6,7 @@ import { IPaginatedResults } from '../../../interfaces/paginated-results.interfa
 import objectPicker from '../../../utils/object-picker';
 import { DoctorDetailsService } from '../../doctor-details/service/doctor-details.service';
 import { UserService } from '../../users/service/user.service';
-import { UseCreateDto } from '../dtos/request/appointment-create.dto';
+import { AppointmentCreateDto } from '../dtos/request/appointment-create.dto';
 import { AppointmentQueryDto } from '../dtos/request/appointment-query.dto';
 import { AppointmentUpdateDto } from '../dtos/request/appointment-update.dto';
 import { AppointmentResponseDto } from '../dtos/response/appointment-response.dto';
@@ -32,7 +32,7 @@ export class AppointmentService {
      */
     create = async (
         userId: string,
-        appointmentCreateDto: UseCreateDto
+        appointmentCreateDto: AppointmentCreateDto
     ): Promise<AppointmentResponseDto> => {
         // validate user id
         await this.userService.findOne(userId);
@@ -43,7 +43,7 @@ export class AppointmentService {
 
         const appointment = mapper.map(
             appointmentCreateDto,
-            UseCreateDto,
+            AppointmentCreateDto,
             AppointmentEntity
         );
 
