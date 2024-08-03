@@ -1,5 +1,5 @@
 export class QueryDto {
-    offset?: number;
+    page?: number;
 
     limit?: number;
 

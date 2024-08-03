@@ -61,10 +61,9 @@ export class PaymentService {
      *
      * @param {string} userId - The user ID of the payment to retrieve.
      * @param {string} appointmentId - The appointment ID of the payment to retrieve.
-     * @param {string} id - The ID of the payment to retrieve.
      * @returns {PaymentResponseDto[]} An array of payment DTOs.
      */
-    findAllByUserId = async (
+    findByUserId = async (
         userId: string,
         appointmentId: string
     ): Promise<PaymentResponseDto> => {
