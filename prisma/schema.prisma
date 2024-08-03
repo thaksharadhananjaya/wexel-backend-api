@@ -37,6 +37,7 @@ model DoctorDetail {
   userId      String        @unique
   specialty   String
   description String
+  hourlyRate  Float
   appoinment  Appointment[]
 
   createdAt DateTime  @default(now())
