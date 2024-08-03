@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon src/main.ts",
+        "dev": "npx tsoa spec-and-routes && nodemon src/main.ts",
         "format": "prettier --write \"src/**/*.ts\"",
-        "build": "tsc",
+        "build": "npx tsoa routes && tsc",
         "start": "node dist/main.js"
     },
     "repository": {
@@ -22,6 +22,7 @@
         "@types/node": "^20.14.11",
         "eslint": "^9.7.0",
         "express": "^4.19.2",
+        "nodemon": "^3.1.4",
         "prettier": "3.3.3",
         "prisma": "5.17.0",
         "ts-node": "^10.9.2",
@@ -31,7 +32,10 @@
         "@automapper/classes": "^8.8.1",
         "@automapper/core": "^8.8.1",
         "@prisma/client": "5.17.0",
+        "@tsoa/runtime": "^6.4.0",
         "dotenv": "^16.4.5",
-        "reflect-metadata": "^0.2.2"
+        "reflect-metadata": "^0.2.2",
+        "swagger-ui-express": "^5.0.1",
+        "tsoa": "^6.4.0"
     }
 }
