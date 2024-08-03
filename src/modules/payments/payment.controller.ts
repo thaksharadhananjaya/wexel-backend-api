@@ -1,94 +1,76 @@
 /**
  * @fileOverview - payment domain REST controller layer implementation
  */
+import { IPaginatedResults } from '../../interfaces/paginated-results.interface';
+import { PaymentCreateDto } from './dtos/request/payment-create.dto';
+import { PaymentUpdateDto } from './dtos/request/payment-update.dto';
+import { PaymentResponseDto } from './dtos/response/payment-response.dto';
 import { PaymentService } from './service/payment.service';
-import { NextFunction, Request, Response } from 'express';
+import { Body, Get, Patch, Path, Post, Query, Route, Tags } from 'tsoa';
 
+@Route()
+@Tags('Payments')
 export class PaymentController {
     private paymentService: PaymentService;
     constructor() {
         this.paymentService = new PaymentService();
     }
 
-    create = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(201).send(
-                await this.paymentService.create(
-                    req.params?.userId,
-                    req.params?.appointmentId,
-                    req.body
-                )
-            );
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Post('users/{userId}/appointments/{appointmentId}/payments')
+    public async create(
+        @Path() userId: string,
+        @Path() appointmentId: string,
+        @Body() paymentCreateDto: PaymentCreateDto
+    ): Promise<PaymentResponseDto> {
+        return this.paymentService.create(
+            userId,
+            appointmentId,
+            paymentCreateDto
+        );
+    }
 
-    findAllByUserId = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            res.status(200).json(
-                await this.paymentService.findAllByUserId(
-                    req.params?.userId,
-                    req.params?.appointmentId
-                )
-            );
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Get('users/{userId}/appointments/{appointmentId}/payments')
+    public async findAllByUserId(
+        @Path() userId: string,
+        @Path() appointmentId: string
+    ): Promise<PaymentResponseDto> {
+        return this.paymentService.findByUserId(userId, appointmentId);
+    }
 
-    findOne = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(
-                await this.paymentService.findOne(
-                    req.params?.userId,
-                    req.params?.appointmentId,
-                    req.params?.id
-                )
-            );
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Get('users/{userId}/appointments/{appointmentId}/payments/{id}')
+    public async findOne(
+        @Path() userId: string,
+        @Path() appointmentId: string,
+        @Path() id: string
+    ): Promise<PaymentResponseDto> {
+        return this.paymentService.findOne(userId, appointmentId, id);
+    }
 
-    update = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(
-                await this.paymentService.update(
-                    req.params?.userId,
-                    req.params?.appointmentId,
-                    req.params?.id,
-                    req.body
-                )
-            );
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Patch('users/{userId}/appointments/{appointmentId}/payments/{id}')
+    public async update(
+        @Path() userId: string,
+        @Path() appointmentId: string,
+        @Path() id: string,
+        @Body() paymentUpdateDto: PaymentUpdateDto
+    ): Promise<PaymentResponseDto> {
+        return this.paymentService.update(
+            userId,
+            appointmentId,
+            id,
+            paymentUpdateDto
+        );
+    }
 
-    delete = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(
-                await this.paymentService.delete(
-                    req.params?.userId,
-                    req.params?.appointmentId,
-                    req.params?.id
-                )
-            );
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    findAll = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(await this.paymentService.findAll(req.query));
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Get('payments')
+    public async findAll(
+        @Query() doctorDetailId?: string,
+        @Query() page?: number,
+        @Query() limit?: number
+    ): Promise<IPaginatedResults<PaymentResponseDto>> {
+        return this.paymentService.findAll({
+            doctorDetailId,
+            page,
+            limit,
+        });
+    }
 }

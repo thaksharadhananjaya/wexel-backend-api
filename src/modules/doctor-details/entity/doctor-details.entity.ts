@@ -10,6 +10,9 @@ export class DoctorDetailsEntity {
     @AutoMap()
     description: string;
     @AutoMap()
+    hourlyRate: number;
+    
+    @AutoMap()
     createdAt: Date;
     @AutoMap()
     updatedAt?: Date;

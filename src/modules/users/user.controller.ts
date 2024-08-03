@@ -1,69 +1,54 @@
 /**
  * @fileOverview - user domain REST controller layer implementation
  */
+import { IPaginatedResults } from '../../interfaces/paginated-results.interface';
+import { UserCreateDto } from './dtos/request/user-create.dto';
+import { UserUpdateDto } from './dtos/request/user-update.dto';
+import { UserResponseDto } from './dtos/response/user-response.dto';
 import { UserService } from './service/user.service';
-import { NextFunction, Request, Response } from 'express';
+import { Body, Delete, Get, Patch, Path, Post, Query, Route, Tags } from 'tsoa';
 
+@Route('users')
+@Tags('Users')
 export class UserController {
     private userService: UserService;
     constructor() {
         this.userService = new UserService();
     }
 
-    create = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(201).send(await this.userService.create(req.body));
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Post()
+    public async create(
+        @Body() userCreateDto: UserCreateDto
+    ): Promise<UserResponseDto> {
+        return this.userService.create(userCreateDto);
+    }
 
-    findAll = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(await this.userService.findAll(req.query));
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Get()
+    public async findAll(
+        @Query() page?: number,
+        @Query() limit?: number
+    ): Promise<IPaginatedResults<UserResponseDto>> {
+        return this.userService.findAll({
+            page,
+            limit,
+        });
+    }
 
-    findOne = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(
-                await this.userService.findOne(req.params?.id)
-            );
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Get('{id}')
+    public async findOne(@Path() id: string): Promise<UserResponseDto> {
+        return this.userService.findOne(id);
+    }
 
-    update = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(
-                await this.userService.update(req.params?.id, req.body)
-            );
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Patch('{id}')
+    public async update(
+        @Path() id: string,
+        @Body() userUpdateDto: UserUpdateDto
+    ): Promise<UserResponseDto> {
+        return this.userService.update(id, userUpdateDto);
+    }
 
-    delete = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(await this.userService.delete(req.params?.id));
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    assignRole = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.status(200).json(
-                await this.userService.assignRoleToUser(
-                    req.params?.id,
-                    req.body
-                )
-            );
-        } catch (error) {
-            next(error);
-        }
-    };
+    @Delete('{id}')
+    public async delete(@Path() id: string): Promise<UserResponseDto> {
+        return this.userService.delete(id);
+    }
 }

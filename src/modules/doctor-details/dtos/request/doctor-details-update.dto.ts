@@ -5,4 +5,6 @@ export class DoctorDetailsUpdateDto {
     specialty?: string;
     @AutoMap()
     description?: string;
+    @AutoMap()
+    hourlyRate: number;
 }
