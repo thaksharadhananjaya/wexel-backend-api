@@ -13,7 +13,6 @@
 Wexel - Doctor consulting backend API
 
 ## Features
-- List your application's main features.
 - Manage Users
 - Manage Doctors
 - Manage Appointments
@@ -41,7 +40,6 @@ Ensure you have the following software installed:
     ```
 
 ## Configuration
-Provide instructions on how to configure the application. For example:
 1. Create a `.env` file in the root directory following `sample.env`
    
 2. Other configuration steps if necessary.
