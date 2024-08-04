@@ -6,10 +6,22 @@ import { RoleCreateDto } from './dtos/request/role-create.dto';
 import { RoleUpdateDto } from './dtos/request/role-update.dto';
 import { RoleResponseDto } from './dtos/response/role-response.dto';
 import { RoleService } from './service/role.service';
-import { Body, Delete, Get, Patch, Path, Post, Query, Route, Tags } from 'tsoa';
+import {
+    Body,
+    Delete,
+    Get,
+    Patch,
+    Path,
+    Post,
+    Query,
+    Route,
+    Security,
+    Tags,
+} from 'tsoa';
 
 @Route('roles')
 @Tags('Roles')
+@Security('bearerAuth')
 export class RoleController {
     private roleService: RoleService;
     constructor() {

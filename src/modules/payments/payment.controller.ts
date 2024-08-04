@@ -2,14 +2,26 @@
  * @fileOverview - payment domain REST controller layer implementation
  */
 import { IPaginatedResults } from '../../interfaces/paginated-results.interface';
+//import auth from '../../middlewares/authentication-middleware';
 import { PaymentCreateDto } from './dtos/request/payment-create.dto';
 import { PaymentUpdateDto } from './dtos/request/payment-update.dto';
 import { PaymentResponseDto } from './dtos/response/payment-response.dto';
 import { PaymentService } from './service/payment.service';
-import { Body, Get, Patch, Path, Post, Query, Route, Tags } from 'tsoa';
+import {
+    Body,
+    Get,
+    Patch,
+    Path,
+    Post,
+    Query,
+    Route,
+    Security,
+    Tags,
+} from 'tsoa';
 
 @Route()
 @Tags('Payments')
+@Security('bearerAuth')
 export class PaymentController {
     private paymentService: PaymentService;
     constructor() {
