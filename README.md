@@ -1,4 +1,4 @@
-# Project Name
+# Wexel - Doctor consulting backend API
 
 ## Table of Contents
 - [Introduction](#introduction)
