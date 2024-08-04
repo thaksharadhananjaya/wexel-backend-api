@@ -2,14 +2,27 @@
  * @fileOverview - appointment domain REST controller layer implementation
  */
 import { IPaginatedResults } from '../../interfaces/paginated-results.interface';
+//import auth from '../../middlewares/authentication-middleware';
 import { AppointmentCreateDto } from './dtos/request/appointment-create.dto';
 import { AppointmentUpdateDto } from './dtos/request/appointment-update.dto';
 import { AppointmentResponseDto } from './dtos/response/appointment-response.dto';
 import { AppointmentService } from './service/appointment.service';
-import { Body, Delete, Get, Patch, Path, Post, Query, Route, Tags } from 'tsoa';
+import {
+    Body,
+    Delete,
+    Get,
+    Patch,
+    Path,
+    Post,
+    Query,
+    Route,
+    Security,
+    Tags,
+} from 'tsoa';
 
 @Route()
 @Tags('Appointments')
+@Security('bearerAuth')
 export class AppointmentController {
     private appointmentService: AppointmentService;
     constructor() {

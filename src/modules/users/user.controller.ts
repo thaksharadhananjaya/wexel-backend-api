@@ -6,10 +6,11 @@ import { UserCreateDto } from './dtos/request/user-create.dto';
 import { UserUpdateDto } from './dtos/request/user-update.dto';
 import { UserResponseDto } from './dtos/response/user-response.dto';
 import { UserService } from './service/user.service';
-import { Body, Delete, Get, Patch, Path, Post, Query, Route, Tags } from 'tsoa';
+import { Body, Delete, Get, Patch, Path, Post, Query, Route, Security, Tags } from 'tsoa';
 
 @Route('users')
 @Tags('Users')
+@Security("bearerAuth")
 export class UserController {
     private userService: UserService;
     constructor() {
