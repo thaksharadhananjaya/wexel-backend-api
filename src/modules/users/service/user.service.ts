@@ -1,85 +1,134 @@
 /**
  * @fileOverview - user domain service layer implementation
  */
-
-import { UseCreateDto } from "../dtos/request/user-create.dto";
-import { UserUpdateDto } from "../dtos/request/user-update.dto";
-import { UserResponseDto } from "../dtos/response/user-response.dto";
-import { UserEntity } from "../entity/user.entity";
-import { mapper } from "../utils/mapper";
-import { UserRepository } from "../repository/user.repository";
+import { NotFoundException } from '../../../exceptions/not-found-exception';
+import { IPaginatedResults } from '../../../interfaces/paginated-results.interface';
+import objectPicker from '../../../utils/object-picker';
+import { RoleService } from '../../roles/service/role.service';
+import { RoleAssignDto } from '../dtos/request/role-assign.dto';
+import { UserCreateDto } from '../dtos/request/user-create.dto';
+import { UserQueryDto } from '../dtos/request/user-query.dto';
+import { UserUpdateDto } from '../dtos/request/user-update.dto';
+import { UserResponseDto } from '../dtos/response/user-response.dto';
+import { UserEntity } from '../entity/user.entity';
+import { UserRepository } from '../repository/user.repository';
+import { mapper } from '../utils/mapper';
 
 export class UserService {
-  private userRepository: UserRepository;
-  constructor() {
-    this.userRepository = new UserRepository();
-  }
+    private userRepository: UserRepository;
+    private roleService: RoleService;
+    constructor() {
+        this.userRepository = new UserRepository();
+        this.roleService = new RoleService();
+    }
 
-  /**
-   * Creates a new user.
-   *
-   * @param {UserCreateDto} userCreateDto - The DTO containing the data to create a new user.
-   * @returns {UserResponseDto} The created user.
-   */
-  create(userCreateDto: UseCreateDto): UserResponseDto {
-    const user = mapper.map(userCreateDto, UseCreateDto, UserEntity);
-    const createdUser = this.userRepository.create(user);
-    const userDto = mapper.map(createdUser, UserEntity, UserResponseDto);
+    /**
+     * Creates a new user.
+     *
+     * @param {UserCreateDto} userCreateDto - The DTO containing the data to create a new user.
+     * @returns {UserResponseDto} The created user.
+     */
+    create = async (userCreateDto: UserCreateDto): Promise<UserResponseDto> => {
+        const user = mapper.map(userCreateDto, UserCreateDto, UserEntity);
 
-    return userDto;
-  }
+        const createdUser = await this.userRepository.create(user);
 
-  /**
-   * Retrieves all users.
-   *
-   * @returns {UserResponseDto[]} An array of user DTOs.
-   */
-  findAll = (): UserResponseDto[] => {
-    const user = this.userRepository.findAll();
-    const userDtos = mapper.mapArray(user, UserEntity, UserResponseDto);
+        // assign default role as 'user'
+        await this.assignRoleToUser(createdUser.id, { roleName: 'user' });
+        const userDto = mapper.map(createdUser, UserEntity, UserResponseDto);
 
-    return userDtos;
-  };
+        return userDto;
+    };
 
-  /**
-   * Retrieves a user by ID.
-   *
-   * @param {string} id - The ID of the user to retrieve.
-   * @returns {UserResponseDto} The user DTO.
-   */
-  findOne = (id: string): UserResponseDto => {
-    const user = this.userRepository.findOne(id);
-    const userDtos = mapper.map(user, UserEntity, UserResponseDto);
+    /**
+     * Retrieves all users.
+     *
+     * @returns {UserResponseDto[]} An array of user DTOs.
+     */
+    findAll = async (
+        userQueryDto: UserQueryDto
+    ): Promise<IPaginatedResults<UserResponseDto>> => {
+        const filters = objectPicker(userQueryDto, ['role']);
+        const options = objectPicker(userQueryDto, ['page', 'limit']);
 
-    return userDtos;
-  };
+        const paginateData = await this.userRepository.findAll(
+            filters,
+            options
+        );
+        const results = mapper.mapArray(
+            paginateData.results,
+            UserEntity,
+            UserResponseDto
+        );
 
-  /**
-   * Updates an existing user.
-   *
-   * @param {string} id - The ID of the user to update.
-   * @param {UserUpdateDto} userUpdateDto - The DTO containing the data to update the user.
-   * @returns {UserResponseDto} The updated user DTO.
-   */
-  update(id: string, userUpdateDto: UserUpdateDto): UserResponseDto {
-    const user = mapper.map(userUpdateDto, UserUpdateDto, UserEntity);
+        return { ...paginateData, results };
+    };
 
-    const updatedUser = this.userRepository.update(id, user);
-    const userDto = mapper.map(updatedUser, UserEntity, UserResponseDto);
+    /**
+     * Retrieves a user by ID.
+     *
+     * @param {string} id - The ID of the user to retrieve.
+     * @returns {UserResponseDto} The user DTO.
+     */
+    findOne = async (id: string): Promise<UserResponseDto> => {
+        const user = await this.userRepository.findOne(id);
 
-    return userDto;
-  }
+        if (!user) {
+            throw new NotFoundException(`User not found given id ${id}`);
+        }
+        const userDto = mapper.map(user, UserEntity, UserResponseDto);
 
-  /**
-   * Deletes a user by ID.
-   *
-   * @param {string} id - The ID of the user to delete.
-   * @returns {UserResponseDto} The deleted user DTO.
-   */
-  delete(id: string): UserResponseDto {
-    const deletedUser = this.userRepository.delete(id);
-    const userDto = mapper.map(deletedUser, UserEntity, UserResponseDto);
+        return userDto;
+    };
 
-    return userDto;
-  }
+    /**
+     * Updates an existing user.
+     *
+     * @param {string} id - The ID of the user to update.
+     * @param {UserUpdateDto} userUpdateDto - The DTO containing the data to update the user.
+     * @returns {UserResponseDto} The updated user DTO.
+     */
+    update = async (
+        id: string,
+        userUpdateDto: UserUpdateDto
+    ): Promise<UserResponseDto> => {
+        // Validate id
+        await this.findOne(id);
+
+        const user = mapper.map(userUpdateDto, UserUpdateDto, UserEntity);
+
+        const updatedUser = await this.userRepository.update(id, user);
+        const userDto = mapper.map(updatedUser, UserEntity, UserResponseDto);
+
+        return userDto;
+    };
+
+    /**
+     * Deletes a user by ID.
+     *
+     * @param {string} id - The ID of the user to delete.
+     * @returns {UserResponseDto} The deleted user DTO.
+     */
+    delete = async (id: string): Promise<UserResponseDto> => {
+        // Validate id
+        await this.findOne(id);
+
+        const deletedUser = await this.userRepository.delete(id);
+        const userDto = mapper.map(deletedUser, UserEntity, UserResponseDto);
+
+        return userDto;
+    };
+
+    /**
+     * Assign role to user by ID.
+     *
+     * @param {string} id - The ID of the user's.
+     * @returns {RoleAssignDto} The role assign DTO.
+     */
+    assignRoleToUser = async (userId: string, roleAssignDto: RoleAssignDto) => {
+        const role = await this.roleService.findByName(roleAssignDto.roleName);
+
+        // call the method from RolesService to assign the role to the user
+        return await this.roleService.createRolesOnUser(userId, role.id);
+    };
 }
