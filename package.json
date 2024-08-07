@@ -7,7 +7,7 @@
         "dev": "npx tsoa spec-and-routes && nodemon src/main.ts",
         "format": "prettier --write \"src/**/*.ts\"",
         "build": "npx tsoa routes && tsc",
-        "start": "node dist/main.js"
+        "start": "node build/dist/main.js"
     },
     "repository": {
         "type": "git",
@@ -33,6 +33,7 @@
         "@automapper/core": "^8.8.1",
         "@prisma/client": "5.17.0",
         "@tsoa/runtime": "^6.4.0",
+        "cors": "^2.8.5",
         "dotenv": "^16.4.5",
         "jsonwebtoken": "^9.0.2",
         "jwks-rsa": "^3.1.0",
